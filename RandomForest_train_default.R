@@ -1,4 +1,3 @@
-#options(java.parameters = "-Xmx12000m")
 library(mlr)
 library(readr)
 library(dplyr)
