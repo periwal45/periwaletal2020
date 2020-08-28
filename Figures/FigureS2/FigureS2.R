@@ -8,6 +8,8 @@ library(matchBox) #CAT plots BiocManager::install("matchBox")
 
 # FigureS2 CAT plots
 
+#input data file (1410_Drugs_ML) available at: http://dx.doi.org/10.17632/7ft539gwf3.1
+
 data<-read.table("1410_Drugs_ML", header = TRUE, sep = '\t')
 head(data)
 ncol(data)

@@ -4,15 +4,9 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(plyr) #for count
+library(ggsci)
 
 ## Figure S1
-########################################################## Color Pallette ###################################################################
-
-set.seed(1)
-n <- 20
-qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-color = grDevices::colors()[grep('gr(a|e)y', grDevices::colors(), invert = T)]
 
 ################################### 1. Drug structural classification and ATC distribution (Fig S1a) ###################################################
 
@@ -24,9 +18,10 @@ count<-count(data, c("ATC","Superclass"))
 head(count)
 nrow(count)
 
-color_sample<-sample(col_vector,18)
-
-ggplot(data.frame(count), aes(x = Superclass, y = freq, group=ATC, fill=ATC)) + geom_point(size =2.5, shape=23, position = position_dodge(width = 0.4))  + scale_fill_manual(values = color_sample) + scale_y_continuous(trans='log2') + labs(x = "Structural Classification (Superclass)", y = "Freq (log2)")+theme_bw()+theme(axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1), legend.text = element_text(size = 12), legend.title = element_text(size = 14)) + coord_flip()
+#FigS1a
+CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/FigS1a.svg", width = 9, height = 6, bg = "white")
+ggplot(data.frame(count), aes(x = Superclass, y = freq, group=ATC, fill=ATC)) + geom_point(size =2.5, shape=23, position = position_dodge(width = 0.4))  + scale_fill_d3(palette = "category20") + scale_y_continuous(trans='log10') + labs(x = "Structural Classification (Superclass)", y = "Freq (log10)")+theme_bw()+theme(axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1), legend.text = element_text(size = 12), legend.title = element_text(size = 14)) + coord_flip()
+dev.off()
 
 ############################### 2. FooDB structural classification and food distribution (Fig S1b) ###########################################################
 
@@ -35,5 +30,7 @@ head(data)
 fcount<-count(data, c('Superclass','Type'))
 head(fcount)
 
-color_sample<-sample(col_vector,15)
-ggplot(data.frame(fcount), aes(x = Superclass, y = freq, group=Type, fill=Type)) + geom_point(size =2.5, shape=23, position = position_dodge(width = 0.4))  + scale_fill_manual(values = color_sample) + scale_y_continuous(trans='log2') + labs(x = "Structural Classification (Superclass)", y = "Freq (log2)")+theme_bw()+theme(axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1), legend.text = element_text(size = 12), legend.title = element_text(size = 14)) + coord_flip()
+#FigS1b
+CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/FigS1b.svg", width = 9, height = 6, bg = "white")
+ggplot(data.frame(fcount), aes(x = Superclass, y = freq, group=Type, fill=Type)) + geom_point(size =2.5, shape=23, position = position_dodge(width = 0.4))  + scale_fill_d3(palette = "category20") + scale_y_continuous(trans='log10') + labs(x = "Structural Classification (Superclass)", y = "Freq (log10)")+theme_bw()+theme(axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1), legend.text = element_text(size = 12), legend.title = element_text(size = 14)) + coord_flip()
+dev.off()
