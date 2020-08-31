@@ -10,9 +10,9 @@ This repository contains scripts for manuscript periwaletal2020
 
 contains code to pre-process data as is described under 'Data preprocessing' section of manuscript.
 
--filters constant variables and removes NAs
--train and test split
--checks overlaps
+- filters constant variables and removes NAs
+- train and test split
+- checks overlaps
 
 2. FeatureSelection.R and FV_filter_values.csv
 
@@ -31,6 +31,6 @@ This code compares the performance of all the trained models using the 20% test 
 
 virtually screens the foodb compounds against the trained models and generates predictions. The FooDB dataset was split into smaller sized files.
 
--virtual screening
--consensus matching
--adding annotations
+- virtual screening
+- consensus matching
+- adding annotations
