@@ -22,6 +22,10 @@ contains code to run feature importance as is described under 'Feature selection
 
 contains code for running the random forest classifier with default and all hyper-parameter settings. The code utilizes parallel computing in cluster environment. See manuscript section 'Random Forest classification'
 
+- default model
+- hyp1
+- hyp2
+- hyp3
 
 4. Performance_Models.R
 
