@@ -31,6 +31,10 @@ contains code for running the random forest classifier with default and all hype
 
 This code compares the performance of all the trained models using the 20% test set. Performance was assessed using various statistical measures as described in the manuscript.
 
+5. Figures folder
+
+The folder contains scripts and underlying data to generate the manuscript main and supplementary figures
+
 5. FooDB_predictions.R 
 
 virtually screens the foodb compounds against the trained models and generates predictions. The FooDB dataset was split into smaller sized files.
