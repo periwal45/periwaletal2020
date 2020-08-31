@@ -1,7 +1,8 @@
 # periwaletal2020
+# Author: Vinita Periwal
 periwaletal2020 source code
 
-link to input data files: Periwal, Vinita (2020), “periwaletal drug-food similarity ML data”, Mendeley Data, V1, doi: 10.17632/7ft539gwf3.1
+link to input data files: Periwal, Vinita (2020), “periwaletal drug-food similarity ML data”, Mendeley Data, V1, (doi: 10.17632/7ft539gwf3.1)
 
 This repository contains scripts for manuscript periwaletal2020
 
