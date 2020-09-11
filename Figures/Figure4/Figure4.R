@@ -1,4 +1,5 @@
-setwd("/Users/vinitaperiwal/Dropbox/Mac/Paper figures/Cox-Assay/Cox-Assay/")
+#setwd("/Users/vinitaperiwal/Dropbox/Mac/Paper figures/Cox-Assay/Cox-Assay/")
+setwd("/Users/vinitaperiwal/periwaletal2020/Figures/Figure4/")
 library(reshape2)
 library(dplyr)
 library(tidyr)
