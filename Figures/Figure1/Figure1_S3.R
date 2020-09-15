@@ -1,4 +1,4 @@
-setwd("/Users/vinitaperiwal/DrugvsDrug/Paper_Data/Figures")
+setwd("/Users/vinitaperiwal/periwaletal2020/Figures")
 library(reshape2)
 library(dplyr)
 library(tidyr)
@@ -11,7 +11,8 @@ th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element
           axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
 
 #read files
-data<-read.table("1410_Drugs_ML", header = TRUE, sep = '\t')
+#(data and model files available at http://dx.doi.org/10.17632/7ft539gwf3.1)
+data<-read.table("1410_Drugs_ML", header = TRUE, sep = '\t') 
 head(data)
 ncol(data) #463
 
@@ -32,7 +33,7 @@ nrow(data.reshape1) #70,02,793
 #Fig1B 
 #median(select_cols1$f1_maccs)
 
-CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/Fig1B.svg", width = 3.2, height = 3.5, bg = "white")
+CairoSVG(file="/Figure1/Fig1B.svg", width = 3.2, height = 3.5, bg = "white")
 ggplot(data.reshape1,aes(x=variable, y=value))+geom_violin(adjust=3,fill="#bdbdbd", lwd=0.3)+
   geom_boxplot(width=0.1, outlier.shape = NA, fill="white", lwd=0.3)+
   scale_x_discrete(name = "Fingerprints", labels = c("Morgan", "FeatMorgan", "AtomPair","RDKit","Torsion","Layered","MACCS")) + 
@@ -53,7 +54,7 @@ nrow(data.reshape2) #2000810
 
 #median(select_cols2$f1_mcs_coverlap)
 
-CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/Fig1C.svg", width = 3, height = 3.4, bg = "white")
+CairoSVG(file="/Figure1/Fig1C.svg", width = 3, height = 3.4, bg = "white")
 ggplot(data.reshape2,aes(x=variable, y=value, fill=variable))+geom_violin(fill="#bdbdbd", lwd=0.3)+
   geom_boxplot(width=0.1, outlier.shape = NA, fill="white", lwd=0.3)+coord_flip()+
   scale_x_discrete(name = "Maximum Common Substructure", labels = c("TS", "OC")) + 
@@ -68,7 +69,7 @@ fv_filter<-filter(fv, fv$feature_importance > 32)
 head(fv_filter)
 nrow(fv_filter)
 
-CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/Fig1D.svg", width = 5, height = 4, bg = "white")
+CairoSVG(file="/Figure1/Fig1D.svg", width = 5, height = 4, bg = "white")
 ggplot(fv_filter, aes(reorder(name, -feature_importance), feature_importance)) + geom_bar(stat = "identity", fill = "#bdbdbd") +
   xlab("Features (top 20)") + ylab("Features importance") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.line = element_line(size=0.3, colour = "black"), panel.grid = element_blank(), panel.background = element_blank(), axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 14, colour = "black"))
@@ -80,15 +81,38 @@ head(hyp)
 melt.hyp<-melt(hyp, id.vars = c("Model","TPR","FNR","FPR","TNR","ACC","MMCE","Kappa"), measure.vars = c("TPR","FNR","FPR","TNR","ACC","MMCE","Kappa","MCC"))
 head(melt.hyp)
 
-CairoSVG(file="/Users/vinitaperiwal/Google Drive/EMBL_Papers/Figures/Fig1E.svg", width = 3.4, height = 3, bg = "white")
+CairoSVG(file="/Figure1/Fig1E.svg", width = 3.4, height = 3, bg = "white")
 melt.hyp %>% dplyr::group_by(Model) %>% ggplot(aes(x=value,y=variable,fill=Model)) + 
   geom_boxplot(lwd=0.3) + scale_fill_jama() + scale_y_discrete(name = "Measure") +
   th + theme(legend.position = "bottom")
 dev.off()
 
-## Fig1F
+## Fig1F and 1G
+#load predictions from test set
+load("Figure1/default_pred.rda")
+load("Figure1/hyp1_pred.rda")
+load("Figure1/hyp2_pred.rda")
+load("Figure1/hyp3_pred.rda")
 
+mlr::performance(default_pred, measures = list(mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
+mlr::performance(hyp1_pred, measures = list(mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
+mlr::performance(hyp2_pred, measures = list(mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
+mlr::performance(hyp3_pred, measures = list(mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
 
+## performance of test set
+df = generateThreshVsPerfData(list(Default = default_pred, Hyp1 = hyp1_pred, Hyp2 = hyp2_pred, Hyp3 = hyp3_pred),measures = list(ppv,tpr,fpr))
+
+#Fig 1F
+#Precision/recall curve
+CairoSVG(file="/Figure1/Fig1F.svg", width = 3.2, height = 3.5, bg = "white")
+plotROCCurves(df, measures = list(tpr,ppv), diagonal = FALSE)
+dev.off()
+
+#Fig 1G
+#ROC curve
+CairoSVG(file="/Figure1/Fig1G.svg", width = 3.2, height = 3.5, bg = "white")
+plotROCCurves(df, measures = list(fpr,tpr))
+dev.off()
 
 #Fig S3
 ggplot(fv, aes(x=name, y=feature_importance)) + geom_point(fill = "#bdbdbd", shape = 21) +
