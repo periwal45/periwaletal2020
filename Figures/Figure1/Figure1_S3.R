@@ -11,27 +11,24 @@ th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element
           axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
 
 #read files
-#(data and model files available at http://dx.doi.org/10.17632/7ft539gwf3.1)
-data<-read.table("1410_Drugs_ML", header = TRUE, sep = '\t') 
+data<-read.table("Figure1/1410_fing_mcs", header = TRUE, sep = ' ') 
 head(data)
-ncol(data) #463
+ncol(data) #11
 
 fv = data.frame(read.csv("FV_filter_values.csv", header = TRUE, sep = ','))
 head(fv)
 colnames(fv)<-c("col_id", "name", "type", "feature_importance")
 
-
-select_cols1<-na.omit(data[,c(1,3,4,5,6,7,8,9)])
+select_cols1<-na.omit(data[,c(1:8)])
 
 head(select_cols1)
-nrow(select_cols1) #1,000,399
+nrow(select_cols1) #993,345
 
-data.reshape1<-melt(select_cols1, id.vars = "drug_id.y")
+data.reshape1<-melt(select_cols1, id.vars = "Final_dataset.drug_id")
 head(data.reshape1)
-nrow(data.reshape1) #70,02,793
+nrow(data.reshape1) #6,953,415
 
 #Fig1B 
-#median(select_cols1$f1_maccs)
 
 CairoSVG(file="/Figure1/Fig1B.svg", width = 3.2, height = 3.5, bg = "white")
 ggplot(data.reshape1,aes(x=variable, y=value))+geom_violin(adjust=3,fill="#bdbdbd", lwd=0.3)+
@@ -44,15 +41,13 @@ dev.off()
 
 #Fig1C
 #MCS and overlap coefficient
-select_cols2<-na.omit(data[,c(1,11,12)])
+select_cols2<-na.omit(data[,c(1,9,10)])
 head(select_cols2)
-nrow(select_cols2) #1000405
+nrow(select_cols2) #993,345
 
-data.reshape2<-melt(select_cols2, id.vars = "drug_id.y")
+data.reshape2<-melt(select_cols2, id.vars = "Final_dataset.drug_id")
 head(data.reshape2)
-nrow(data.reshape2) #2000810
-
-#median(select_cols2$f1_mcs_coverlap)
+nrow(data.reshape2) #1,986,690
 
 CairoSVG(file="/Figure1/Fig1C.svg", width = 3, height = 3.4, bg = "white")
 ggplot(data.reshape2,aes(x=variable, y=value, fill=variable))+geom_violin(fill="#bdbdbd", lwd=0.3)+
