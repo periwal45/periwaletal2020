@@ -6,16 +6,17 @@ library(tidyr)
 library(ggplot2)
 library(ggsci)
 library(ggpubr)
+library(Cairo)
 
-inhib<-data.frame(read.table(file="Cox_results", header = TRUE, sep = '\t'))
+inhib<-data.frame(read.table(file="Cox_results_NA", header = TRUE, sep = '\t'))
 inhib
 
 inhib.reshape<-melt(inhib, id.vars = c("Conc"))
 inhib.reshape
 
-CairoSVG(file="cox_inhib.svg", width = 5, height = 4, bg = "white")
+CairoSVG(file="cox_inhib_na.svg", width = 5, height = 4, bg = "white")
 ggplot(inhib.reshape, aes(x=Conc,y=value,color=variable)) + geom_point() + geom_line(size=0.8) + scale_color_jama() +
-  xlab(label = "log[Conc. (µM)]") + ylab(label = " % Relative Inhibition") + ylim(c(-150,100))
+  xlab(label = "log[Conc. (µM)]") + ylab(label = " % Relative Inhibition") + ylim(c(-150,100)) + theme_minimal()
 dev.off()
 
 #RFU plot
