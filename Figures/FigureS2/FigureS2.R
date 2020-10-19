@@ -7,19 +7,11 @@ library(plyr) #for count
 library(matchBox) #CAT plots BiocManager::install("matchBox")
 
 # FigureS2 CAT plots
-
-#input data file (1410_Drugs_ML) available at: http://dx.doi.org/10.17632/7ft539gwf3.1
-
-data<-read.table("1410_Drugs_ML", header = TRUE, sep = '\t')
-head(data)
-ncol(data)
-
 mycolors<-c("#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02")
 
-select_cols<-data.frame(data[,(1:9)])
-head(select_cols)
-comb<-unite(select_cols, newcol, c(drug_id.y, drug_id.x), remove=TRUE)
-head(comb)
+data<-read.table("FigureS2/drugs_fp", header = TRUE, sep = '\t')
+dim(data)
+head(data)
 
 morgan<-comb[order(-comb$f1_morgan),]
 head(morgan)

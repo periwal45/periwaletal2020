@@ -14,6 +14,7 @@ th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element
 #read files
 data<-read.table("Figure1/1410_fing_mcs", header = TRUE, sep = ' ') 
 head(data)
+nrow(data) #993345
 ncol(data) #11
 
 fv = data.frame(read.csv("Figure1/FV_filter_values.csv", header = TRUE, sep = ','))
