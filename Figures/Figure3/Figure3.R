@@ -1,3 +1,4 @@
+setwd("/Users/vinitaperiwal/periwaletal2020/Figures/Figure3")
 library(reshape2)
 library(dplyr)
 library(tidyr)
@@ -24,5 +25,9 @@ V(net)$shape<-shpe[V(net)$media.type]
 par(mar=c(0.9, 0.9, 0.9, 0.9))
 plot(net, vertex.label.cex=0.5, vertex.label.family="Helvetica",edge.color="#525252", edge.width=0.9, edge.arrow.size=0.01, margins=c(10,10))
 
+dev.off()
+
 legend(x=1.1, y=0.7, c("Alimentary","Blood","Cardiovascular","Dermatological","Genitourinary","Hormonal","Antiinfectives","Antineoplastics","Musculoskeletal","Nervous","Respiratory","Sensory","Various","Neutraceutical","Multiple-ATC","Unclassified","Target","FoodCmpd"), pch=21,
        col="white", pt.bg=colrs, pt.cex=2, cex=1, bty="n", ncol=1)
+
+dev.off()

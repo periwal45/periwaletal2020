@@ -1,4 +1,4 @@
-setwd("/Users/vinitaperiwal/DrugvsDrug/Paper_Data/Figures/")
+setwd("/Users/vinitaperiwal/periwaletal2020/Figures/")
 library(reshape2)
 library(dplyr)
 library(tidyr)
