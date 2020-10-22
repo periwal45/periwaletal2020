@@ -7,6 +7,9 @@ library(ggsci)
 library(ggpubr)
 library(Cairo)
 
+th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element_text(size=12,color = "black"),
+          axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
+
 inhib<-data.frame(read.table(file="Cox_results_NA", header = TRUE, sep = '\t'))
 inhib
 
@@ -15,7 +18,7 @@ inhib.reshape
 
 CairoSVG(file="cox_inhib_na.svg", width = 5, height = 4, bg = "white")
 ggplot(inhib.reshape, aes(x=Conc,y=value,color=variable)) + geom_point() + geom_line(size=0.8) + scale_color_jama() +
-  xlab(label = "log[Conc. (µM)]") + ylab(label = " % Relative Inhibition") + ylim(c(-150,100)) + theme_minimal()
+  xlab(label = "log[Conc. (µM)]") + scale_y_continuous(name = " % Relative Inhibition", limits = c(-1,60)) + theme_minimal()
 dev.off()
 
 #RFU plot
