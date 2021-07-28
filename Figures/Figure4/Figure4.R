@@ -1,39 +1,36 @@
-setwd("/Users/vinitaperiwal/periwaletal2020/Figures/Figure4/")
+# creating a scatter plot to show predictions from best fingerprint and ML model
 library(reshape2)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggsci)
-library(ggpubr)
 library(Cairo)
+library(ggrepel) #non-overlapping text labels
 
-th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element_text(size=12,color = "black"),
-          axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
+#load feat morgan outcomes and food predictions
+food_preds<-read.table("drug_food_preds.csv", header = TRUE, sep = ',') 
+head(food_preds)
+nrow(food_preds)
 
-inhib<-data.frame(read.table(file="Cox_results_NA", header = TRUE, sep = '\t'))
-inhib
+names(food_preds)[1]<-"Final_dataset.drug_id"
 
-inhib.reshape<-melt(inhib, id.vars = c("Conc"))
-inhib.reshape
+feat<-read.table("feat_drugfood", header = TRUE, sep = ' ') 
+head(feat)
+nrow(feat)
 
-CairoSVG(file="cox_inhib_na.svg", width = 5, height = 4, bg = "white")
-ggplot(inhib.reshape, aes(x=Conc,y=value,color=variable)) + geom_point() + geom_line(size=0.8) + scale_color_jama() +
-  xlab(label = "log[Conc. (µM)]") + scale_y_continuous(name = " % Relative Inhibition", limits = c(-1,60)) + theme_minimal()
-dev.off()
+merged<-merge(feat,food_preds,by="Final_dataset.drug_id")
+head(merged)
+nrow(merged)
 
-#RFU plot
+merged<-na.omit(merged)
+nrow(merged)
+head(merged)
 
-rfu<-data.frame(read.table(file="RFU_readings", header = TRUE, sep = '\t'))
-head(rfu)
-
-rfu.reshape<-melt(rfu, id.vars = c("Time","Concentration")) %>% na.omit() %>% mutate(Conc_var = paste0(Concentration, "_", variable))
-head(rfu.reshape)
-
-CairoSVG(file="cox_rfu.svg", width = 8, height = 4, bg = "white")
-rfu.reshape %>% dplyr::group_by(Concentration, variable) %>%
-  ggplot(., aes(x=Time,y=value, color=variable)) + geom_point(size = 0.6) + theme_bw() + scale_color_jama() +
-  geom_line(aes(group=Conc_var), size=0.5) + 
-  ylab(label = "RFU/min") + xlab(label="Time (min)") +
-  facet_wrap("Concentration", scales = "free")
+CairoSVG(file="scatter_plot.svg", width = 5, height = 4, bg = "white")
+merged %>% filter(prob.Match > 0.5) %>% 
+  ggscatter(x="f1_featmorgan",y="prob.Match",add = "reg.line", conf.int = TRUE, 
+            cor.coef = TRUE, cor.method = "pearson",shape = 20,size = 0.5) + geom_point(aes(color=response)) + th + scale_x_continuous(name = "FeatMorgan (TS score)") + 
+  scale_y_continuous(name="Predicted probability") + theme_minimal() +
+  scale_color_jama()
 dev.off()
 
