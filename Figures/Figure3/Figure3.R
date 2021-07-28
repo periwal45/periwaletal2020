@@ -1,33 +1,38 @@
-setwd("/Users/vinitaperiwal/periwaletal2020/Figures/Figure3")
 library(reshape2)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggsci)
-library(igraph)
+library(ggpubr)
+library(Cairo)
 
-nodes<-read.csv("matrix_drug_prot_food_nodes", header = TRUE, sep = '\t', as.is = T)
-edges<-as.matrix(read.csv("matrix_drug_prot_food_edges", header = TRUE, sep = '\t', as.is = T, row.names=1))
-head(edges)
-edges_melt<-melt(edges)
-subset<-subset(edges_melt, edges_melt$value >= 1)
-nrow(subset)
+th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element_text(size=12,color = "black"),
+          axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
 
-net <- graph_from_data_frame(d=subset, vertices=nodes, directed=T)
+inhib<-data.frame(read.table(file="Cox_results_NA", header = TRUE, sep = '\t'))
+inhib
 
-colrs<-c("#98B900","#F67500", "#1065E2", "#d7191c", "#00B2D5", "#7F130D", "#009390", "#FA007E","#003251","#33A02C","#8434C1", "#565E83", "#7B452E", "#814F00", "#D95F0E", "#D1A400","#BDBDBD", "#f1b6da")
-V(net)$color<-colrs[V(net)$media.type]
-V(net)$frame.color<-colrs[V(net)$media.type]
-V(net)$vertex.size<-V(net)$size
-shpe<-c("circle","circle", "circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","square")
-V(net)$shape<-shpe[V(net)$media.type]
+inhib.reshape<-melt(inhib, id.vars = c("Conc"))
+inhib.reshape
 
-par(mar=c(0.9, 0.9, 0.9, 0.9))
-plot(net, vertex.label.cex=0.5, vertex.label.family="Helvetica",edge.color="#525252", edge.width=0.9, edge.arrow.size=0.01, margins=c(10,10))
-
+CairoSVG(file="cox_inhib_na.svg", width = 5, height = 4, bg = "white")
+ggplot(inhib.reshape, aes(x=Conc,y=value,color=variable)) + geom_point() + geom_line(size=0.8) + scale_color_jama() +
+  xlab(label = "log[Conc. (µM)]") + scale_y_continuous(name = " % Relative Inhibition", limits = c(-1,60)) + theme_minimal()
 dev.off()
 
-legend(x=1.1, y=0.7, c("Alimentary","Blood","Cardiovascular","Dermatological","Genitourinary","Hormonal","Antiinfectives","Antineoplastics","Musculoskeletal","Nervous","Respiratory","Sensory","Various","Neutraceutical","Multiple-ATC","Unclassified","Target","FoodCmpd"), pch=21,
-       col="white", pt.bg=colrs, pt.cex=2, cex=1, bty="n", ncol=1)
+#RFU plot
 
+rfu<-data.frame(read.table(file="RFU_readings", header = TRUE, sep = '\t'))
+head(rfu)
+
+rfu.reshape<-melt(rfu, id.vars = c("Time","Concentration")) %>% na.omit() %>% mutate(Conc_var = paste0(Concentration, "_", variable))
+head(rfu.reshape)
+
+CairoSVG(file="cox_rfu.svg", width = 8, height = 4, bg = "white")
+rfu.reshape %>% dplyr::group_by(Concentration, variable) %>%
+  ggplot(., aes(x=Time,y=value, color=variable)) + geom_point(size = 0.6) + theme_bw() + scale_color_jama() +
+  geom_line(aes(group=Conc_var), size=0.5) + 
+  ylab(label = "RFU/min") + xlab(label="Time (min)") +
+  facet_wrap("Concentration", scales = "free")
 dev.off()
+
