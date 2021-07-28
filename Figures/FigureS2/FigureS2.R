@@ -1,4 +1,3 @@
-setwd("/Users/vinitaperiwal/periwaletal2020/Figures/")
 library(reshape2)
 library(dplyr)
 library(tidyr)
