@@ -2,11 +2,11 @@ FID	Food_Name	Part	Type	FDB_ID	CMP_Name1	CID	Superclass
 F4118	Burdock_Seed	NULL	Vegetables	FDB004117	Lappaurin	3016	Organoheterocyclic compounds
 F2156	Other_fruits	NULL	Fruits	FDB002156	Flurbiprofen	3394	Benzenoids
 F18344	Coffee	NULL	Beverages	FDB018337	beta-D-Glucopyranosyl-(1->6)-beta-D-glucopyranosyl-(1->4)-D-mannose	4120027	Organic oxygen compounds
-F11814	Custard_apple	NULL	Fruits FDB011811 (S)-Higenamine	44229138 Organoheterocyclic compounds
-F11814	Opium_Poppy	NULL	Herbs_condiments_and_spices FDB011811 (S)-Higenamine	44229138 Organoheterocyclic compounds
+F11814	Custard_apple	NULL	Fruits	FDB011811	(S)-Higenamine	44229138	Organoheterocyclic compounds
+F11814	Opium_Poppy	NULL	Herbs_condiments_and_spices	FDB011811	(S)-Higenamine	44229138	Organoheterocyclic compounds
 F2029	Opium_Poppy	NULL	Herbs_condiments_and_spices	FDB002029	Laudanidine	92732	Organoheterocyclic compounds
 F2946	Pomegranate	NULL	Fruits	FDB002945	Punicic_acid	12309425	Lipids and lipid-like molecules
-F18888	Tea	NULL	Beverages	FDB018881 Epicatechin 3-(4-methylgallate)	467297	Phenylpropanoids and polyketides
+F18888	Tea	NULL	Beverages	FDB018881	Epicatechin	3-(4-methylgallate)	Phenylpropanoids and polyketides
 F10900	Meats	NULL	Animal foods	FDB010898	2-Furanmethanethiol	7363	Organoheterocyclic compounds
 F12858	Meats	NULL	Animal foods	FDB012855	Methyl_phenyl_sulfide	7520	Organosulfur compounds
 F19463	Meats	NULL	Animal foods	FDB019456	1-Hexanethiol	8106	Organosulfur compounds
