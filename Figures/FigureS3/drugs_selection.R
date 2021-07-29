@@ -20,24 +20,23 @@ head(data)
 dim(data)
 
 # superclass
-sc<-data %>% group_by(Superclass) %>% summarise(count = length(Superclass))
+sc<-data.frame(table(data$Superclass))
 head(sc)
 
 CairoSVG(file="drugs_superclass.svg", width = 5, height = 7, bg = "white")
-ggplot(sc, aes(Superclass,count)) + geom_bar(stat = "identity", fill = "#bdbdbd") +
+ggplot(sc, aes(Var1,Freq)) + geom_bar(stat = "identity", fill = "#bdbdbd") +
   xlab("Superclass") + ylab("#count") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.line = element_line(size=0.3, colour = "black"), panel.grid = element_blank(), panel.background = element_blank(), axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 14, colour = "black"))
 dev.off()
 
 # filter top superclasses with count > 100
 
-sc100<-data %>% group_by(Superclass) %>% summarise(count = length(Superclass)) %>%
-  filter(count > 100)
+sc100<-sc %>% filter(Freq > 100)
 head(sc100)
 
 ## randomly pick 20% drugs from Superclass having greater than 100 drugs
 test_drugs<-data.frame(data %>% dplyr::group_by(Drug.ID, ATC, Name, Superclass, Class) %>%
-  filter(Superclass %in% as.factor(sc100$Superclass)))
+  filter(Superclass %in% as.factor(sc100$Var1)))
 head(test_drugs)
 
 # this will be independent set
