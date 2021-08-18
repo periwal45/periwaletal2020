@@ -6,6 +6,12 @@ library(ggplot2)
 library(ggsci)
 library(Cairo)
 
+# set global theme for all plots
+
+th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element_text(size=12,color = "black"),
+          axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
+
+
 # plotting food predictions different threshold
 
 food_preds<-data.frame(read.table(file = "drug_food_preds.csv", header = TRUE, sep = ','))

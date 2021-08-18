@@ -4,12 +4,18 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggsci)
+library(ggpubr)
 library(Cairo)
 library(ggrepel) #non-overlapping text labels
 
+# set global theme for all plots
+
+th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element_text(size=12,color = "black"),
+          axis.text.x = element_text(size=10, color = "black"),axis.text.y = element_text(size=10, color = "black"))
+
 #load feat morgan outcomes and food predictions
 food_preds<-read.table("drug_food_preds.csv", header = TRUE, sep = ',') 
-head(food_preds)
+View(food_preds)
 nrow(food_preds)
 
 names(food_preds)[1]<-"Final_dataset.drug_id"
@@ -33,4 +39,3 @@ merged %>% filter(prob.Match > 0.5) %>%
   scale_y_continuous(name="Predicted probability") + theme_minimal() +
   scale_color_jama()
 dev.off()
-
