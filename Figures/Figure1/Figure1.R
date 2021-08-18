@@ -60,8 +60,9 @@ res
 
 CairoSVG(file = "Fig1D.svg", width = 3, height = 3, bg = "white")
 res %>% melt() %>% ggplot(aes(x=Model,y=value)) + geom_point(aes(color=Model)) +
-  th + scale_color_jama() + facet_wrap(~variable, scales = "free") + 
-  theme(legend.position = "bottom", axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
+  th + scale_color_jama() + facet_wrap(~variable) + 
+  theme(legend.position = "bottom", axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank()) +
+  ylim(c(0,1.00))
 dev.off()
 
 #Fig1E and 1F
