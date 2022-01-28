@@ -53,56 +53,50 @@ ggplot(data.reshape2,aes(x=variable, y=value, fill=variable))+geom_violin(fill="
   guides(fill=FALSE)
 dev.off()
 
-#Fig 1D
-# read result table
-res<-data.frame(read.table("ML_results", sep = '\t', header = TRUE))
-res
 
-CairoSVG(file = "Fig1D.svg", width = 3, height = 3, bg = "white")
-res %>% melt() %>% ggplot(aes(x=Model,y=value)) + geom_point(aes(color=Model)) +
-  th + scale_color_jama() + facet_wrap(~variable) + 
-  theme(legend.position = "bottom", axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank()) +
-  ylim(c(0,1.00))
+#Fig 1D
+# performance metrics
+all<-read.table(file = "perf_measures", sep = '\t', header = TRUE)
+head(all)
+
+CairoSVG(file="Fig1D.svg", width = 3.6, height = 4, bg = "white")
+all %>% melt() %>% filter(variable %in% c("f1","mcc","ppv","auc")) %>%
+  ggplot(aes(x=variable,y=value,fill=classifier)) +
+  geom_boxplot(lwd = 0.3, position = position_dodge2()) + scale_fill_jco() + 
+  th + scale_x_discrete(name="measure") + theme(legend.position="bottom")
 dev.off()
 
-#Fig1E and 1F
-#plots of ML models: RLR and RF
-#get confusion matrix for RF
-load("test_set_predictions.rda")
-preds
-
-d = generateThreshVsPerfData(preds, measures = list(f1,mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
-plotThreshVsPerf(d)
 
 #Fig 1E
 #Precision/recall curve
-CairoSVG(file="Fig1E.svg", width = 3.2, height = 3.5, bg = "white")
-plotROCCurves(d, measures = list(tpr,ppv), diagonal = FALSE)
+load("pr_recall.rds")
+head(pr_recall)
+
+CairoSVG(file="Fig1E.svg", width = 5, height = 5, bg = "white")
+plotROCCurves(pr_recall, diagonal = FALSE)
 dev.off()
+
 
 #Fig 1F
 #ROC curve
-CairoSVG(file="Fig1F.svg", width = 3.2, height = 3.5, bg = "white")
-plotROCCurves(d, measures = list(fpr,tpr))
+load("roc.rds")
+head(roc)
+
+CairoSVG(file="Fig1F.svg", width = 5, height = 5, bg = "white")
+plotROCCurves(roc, diagonal = FALSE)
 dev.off()
 
 #Fig 1G
 # feature importance
 ##### Feature importance
-load("wt_rforest.rda") # the model object is 'wt_rforest'
-print("trained random forest model")
-wt_rforest
+feat_result<-read.table(file = "feat_importance", sep = '\t', header = TRUE)
+head(feat_result)
 
-#extract features
-feat_importance<-getFeatureImportance(wt_rforest, type = 1)
-
-feat_result<-data.frame(feat_importance$res)
-feat_result$variable <- gsub('f1_', '', feat_result$variable)
-View(feat_result)
-
-CairoSVG(file="Fig1G.svg", width = 5, height = 4, bg = "white")
-feat_result %>% top_n(25) %>% 
-  ggplot(aes(reorder(variable, -importance), importance)) + geom_bar(stat = "identity", fill = "#bdbdbd") +
-  xlab("Features (top 25)") + ylab("Feature importance") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.line = element_line(size=0.3, colour = "black"), panel.grid = element_blank(), panel.background = element_blank(), axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 14, colour = "black"))
+CairoSVG(file="Fig1G.svg", width = 6, height = 4, bg = "white")
+feat_result %>% melt() %>% group_by(set) %>% top_n(20) %>%
+  ggplot(aes(reorder(FP, -value), value)) + geom_boxplot(lwd=0.3) +
+  xlab("Top ranking features") + ylab("Feature importance") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.line = element_line(size=0.3, 
+  colour = "black"), panel.grid = element_blank(), panel.background = element_blank(), axis.text = element_text(size = 12, colour = "black"), axis.title = element_text(size = 14, colour = "black"))
 dev.off()
+
