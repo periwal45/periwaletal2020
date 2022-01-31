@@ -1,3 +1,4 @@
+args<-commandArgs(TRUE)
 # Building a random forest model
 library(mlr)
 library(readr)
@@ -10,15 +11,16 @@ library(parallel)
 set.seed(44)
 
 ##load train set
-data<-data.frame(read.csv("train_dist_desc", header = TRUE, sep = ','))
-##smry<-summarizeColumns(train.set)
-##write.csv(smry, file = "train_smry.csv", quote = FALSE, row.names = FALSE)
+data_train<-data.frame(read.table(args[1], header = TRUE, sep = ','))
+print("Train set loaded")
+print(args[1])
+#data<-data.frame(read.csv("train_dist_desc", header = TRUE, sep = ','))
 
 ### Filter constant variables
-constant_cols <- whichAreConstant(data)
+constant_cols <- whichAreConstant(data_train)
 constant_cols
 
-train_sub<-subset(data, select = -c(constant_cols))
+train_sub<-subset(data_train, select = -c(constant_cols))
 print("dimensions of data after removing constant columns")
 dim(train_sub)
 
@@ -37,7 +39,7 @@ train_task_dist_desc
 ## Constructing a learner (RandomForest)
 
 rf.prob <- makeLearner("classif.randomForest", predict.type = "prob",
-			par.vals = list(importance = TRUE))
+                       par.vals = list(importance = TRUE))
 
 ##view tunable hyperparameters
 #rf.prob$par.set
@@ -46,7 +48,6 @@ rf.prob <- makeLearner("classif.randomForest", predict.type = "prob",
 ## single value denotes weight of positive class, negative class receives weight of 1
 
 wcw.rf.prob<-makeWeightedClassesWrapper(rf.prob, wcw.param = "classwt")
-
 
 ## Optimization and Training (model building) 
 
@@ -91,12 +92,14 @@ wt_rforest <- train(rf.tree_dist_desc, train_task_dist_desc)
 #getLearnerModel(wt_rforest)
 
 ## save the models !
-save(wt_rforest, file = "wt_rforest.rda")
+save(wt_rforest, file = paste0(args[1],"_wt_rforestT.rda"))
 
 #### Testing
 #load test set
-test.data<-read.table("test_dist_desc", sep = ",", header = TRUE)
+test.data<-data.frame(read.table(args[2], header = TRUE, sep = ','))
 dim(test.data)
+print("Test set loaded")
+print(args[2])
 
 test.data<-data.frame(subset(test.data, select = -c(constant_cols)))
 print("dimensions of test data")
@@ -108,12 +111,12 @@ dim(test.data)
 
 ## 7. Make predictions
 preds <- predict(wt_rforest, newdata = test.data)
-write.csv(as.data.frame(preds), file="rf_testset_preds.csv") 
+write.csv(as.data.frame(preds), file=paste0(args[2],"_predsT.csv"))
 
 #save prediction object
-save(preds, file="test_set_predictions.rda")
+save(preds, file=paste0(args[2],"_predictionsT.rda"))
 
-perf<-mlr::performance(preds, measures = list(mcc,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
+perf<-mlr::performance(preds, measures = list(mcc,f1,tpr,fpr,fnr,tnr,ppv,acc,bac,mmce,kappa,auc))
 print("performance on test set")
 perf
 
