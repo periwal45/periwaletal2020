@@ -16,15 +16,15 @@ th<-theme(plot.title = element_text(size = 12, face = "bold"),axis.title=element
 
 #load feat morgan outcomes and food predictions
 # predictions
-set1_food<-data.frame(read.csv(file = "set1rf_drug_food_preds.csv", header = TRUE))
+set1_food<-data.frame(read.csv(file = "set1rf_drug_food_preds.csv", header = TRUE)) #refer file on mendeley link
 set1_food<-na.omit(set1_food)
-set2_food<-data.frame(read.csv(file = "set2rf_drug_food_preds.csv", header = TRUE))
+set2_food<-data.frame(read.csv(file = "set2rf_drug_food_preds.csv", header = TRUE)) #refer file on mendeley link
 set2_food<-na.omit(set2_food)
-set3_food<-data.frame(read.csv(file = "set3rf_drug_food_preds.csv", header = TRUE))
+set3_food<-data.frame(read.csv(file = "set3rf_drug_food_preds.csv", header = TRUE)) #refer file on mendeley link
 set3_food<-na.omit(set3_food)
-set4_food<-data.frame(read.csv(file = "set4rf_drug_food_preds.csv", header = TRUE))
+set4_food<-data.frame(read.csv(file = "set4rf_drug_food_preds.csv", header = TRUE)) #refer file on mendeley link
 set4_food<-na.omit(set4_food)
-set5_food<-data.frame(read.csv(file = "set5rf_drug_food_preds.csv", header = TRUE))
+set5_food<-data.frame(read.csv(file = "set5rf_drug_food_preds.csv", header = TRUE)) #refer file on mendeley link
 set5_food<-na.omit(set5_food)
 
 names(set1_food)[1]<-"Final_dataset.drug_id"
