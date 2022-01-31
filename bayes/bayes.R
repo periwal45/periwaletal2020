@@ -1,5 +1,4 @@
 args<-commandArgs(TRUE)
-setwd("/g/scb/patil/periwal/ML/revision_ML/ML_revision_2/")
 library(mlr)
 library(readr)
 library(dplyr)

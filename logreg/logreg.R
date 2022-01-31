@@ -1,5 +1,4 @@
 args<-commandArgs(TRUE)
-setwd("/g/scb/patil/periwal/ML/revision_ML/ML_revision_2/")
 library(mlr)
 library(readr)
 library(dplyr)
@@ -74,13 +73,6 @@ grep("f1_topological.khs.sssB.y",colnames(datap)) # col 254
 datap<-datap[,!apply(datap == 0, 2, all)]
 print("after removing all 0's dimesnions of datap")
 dim(datap)
-
-# # Center and scale data
-#meantr <- apply(datap, 2, mean)
-#sdtr <- apply(datap, 2, sd)
-#strain<-scale(datap,center=meantr,scale=sdtr)
-#print("scaled data dimensions")
-#dim(strain)
 
 # tune cost 
 # first get some orientation using heuristicC, better to use balanced sample for this
